@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/app" element={<App />} />
           <Route path="/CreateForm" element={<CreateFireman />} />
-          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/Scan" element={<FingerPrintScan />} />
         </Routes>
       </HeroUIProvider>
