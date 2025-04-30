@@ -5,6 +5,7 @@ import { HeroUIProvider } from "@heroui/react";
 import './index.css'
 import App from './App.jsx'
 import CreateFireman from './pages/CreateFireman.js';
+import Home from './pages/Home.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,7 +13,8 @@ createRoot(document.getElementById('root')).render(
       <HeroUIProvider>
         <Routes>
           <Route path="/app" element={<App />} />
-          <Route path="/" element={<CreateFireman />} />
+          <Route path="/CreateForm" element={<CreateFireman />} />
+          <Route path="/Home" element={<Home />} />
         </Routes>
       </HeroUIProvider>
     </BrowserRouter>
