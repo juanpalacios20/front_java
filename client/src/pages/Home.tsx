@@ -18,7 +18,7 @@ export function Home() {
             >
               Crear nuevo bombero
             </Button>
-            <Button color="primary" variant="shadow" cursor-pointer="true">
+            <Button color="primary" variant="shadow" cursor-pointer="true" onPress={() => navigate("/Scan")}>
               Registrar turno
             </Button>
           </div>

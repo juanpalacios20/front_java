@@ -12,12 +12,13 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@heroui/react";
-import App from "../App";
+
 import { useNavigate } from "react-router";
 
 export function CreateFireman() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -25,6 +26,29 @@ export function CreateFireman() {
     email: "",
     gs: "",
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelect = (key: React.Key) => {
+    setFormData((prev) => ({ ...prev, gs: String(key) }));
+  };
+
+  const handleCreate = () => {
+    const allFilled =
+      formData.name &&
+      formData.code &&
+      formData.nuip &&
+      formData.gs &&
+      formData.email;
+
+    if (allFilled) {
+      onOpen();
+    }
+  };
+
   return (
     <div className="flex min-h-screen justify-center items-center">
       <div className="w-full max-w-xl p-8 shadow-md rounded-xl bg-white">
@@ -41,7 +65,8 @@ export function CreateFireman() {
               label="Nombre completo"
               labelPlacement="outside"
               placeholder="Ingresa el nombre completo"
-              defaultValue={formData.name}
+              value={formData.name}
+              onChange={handleChange}
             />
             <Input
               isRequired
@@ -50,7 +75,8 @@ export function CreateFireman() {
               label="Código"
               labelPlacement="outside"
               placeholder="Ingresa el código"
-              defaultValue={formData.code}
+              value={formData.code}
+              onChange={handleChange}
             />
             <Input
               isRequired
@@ -60,7 +86,8 @@ export function CreateFireman() {
               labelPlacement="outside"
               placeholder="Ingresa el documento de identidad"
               type="number"
-              defaultValue={formData.nuip}
+              value={formData.nuip}
+              onChange={handleChange}
               min={1}
               max={9999999999}
             />
@@ -70,16 +97,14 @@ export function CreateFireman() {
               labelPlacement="outside"
               placeholder="Selecciona el tipo de sangre"
               variant="bordered"
-              defaultSelectedKeys={[formData.gs]}
+              selectedKeys={[formData.gs]}
+              onSelectionChange={(keys) => handleSelect([...keys][0])}
             >
-              <SelectItem>A+</SelectItem>
-              <SelectItem>A-</SelectItem>
-              <SelectItem>B+</SelectItem>
-              <SelectItem>B-</SelectItem>
-              <SelectItem>AB+</SelectItem>
-              <SelectItem>AB-</SelectItem>
-              <SelectItem>O+</SelectItem>
-              <SelectItem>O-</SelectItem>
+              {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                (tipo) => (
+                  <SelectItem key={tipo}>{tipo}</SelectItem>
+                )
+              )}
             </Select>
             <Input
               isRequired
@@ -89,15 +114,15 @@ export function CreateFireman() {
               label="Correo electrónico"
               labelPlacement="outside"
               placeholder="Ingresa el correo electrónico"
-              defaultValue={formData.email}
+              value={formData.email}
+              onChange={handleChange}
             />
             <div className="flex gap-2 justify-center items-center">
               <Button
                 color="primary"
                 variant="shadow"
                 cursor-pointer="true"
-                type="submit"
-                onPress={onOpen}
+                onPress={handleCreate}
               >
                 Crear
               </Button>
@@ -109,52 +134,65 @@ export function CreateFireman() {
               >
                 Cancelar
               </Button>
-              <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1">
-                      ⚠️ Información importante
-                      </ModalHeader>
-                      <ModalBody>
-                      <div className="flex flex-col gap-2">
-                      <p className="text-sm">
-                        1. Verificar que tiene el lector de huella conectado correctamente.
-                      </p>
-                      <p className="text-sm">
-                        2. Al presionar el botón <strong>"Crear"</strong>, tendrá <strong>5 segundos</strong> para colocar la huella en el lector.
-                      </p>
-                      <p className="text-sm ">
-                        3. Si la huella se registra correctamente dentro de ese tiempo, el bombero se creará corrrectamente.
-                      </p>
-                      <p className="text-sm">
-                        4. Si no se coloca la huella a tiempo, el bombero no se creará y tendrá que intentarlo nuevamente.
-                      </p>
-                      <p className="text-sm">
-                        <strong>Nota: es obligatorio que el bombero tenga registrada una huella.</strong>
-                      </p>
-                    </div>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="danger"
-                          variant="light"
-                          onPress={onClose}
-                        >
-                          Cancelar
-                        </Button>
-                        <Button color="primary" onPress={onClose}>
-                          Continuar
-                        </Button>
-                      </ModalFooter>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
             </div>
           </>
         </Form>
       </div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                ⚠️ Información importante
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm">
+                    1. Verificar que tiene el lector de huella conectado
+                    correctamente.
+                  </p>
+                  <p className="text-sm">
+                    2. Al presionar el botón <strong>"Continuar"</strong>,
+                    tendrá <strong>5 segundos</strong> para colocar la huella en
+                    el lector.
+                  </p>
+                  <p className="text-sm ">
+                    3. Si la huella se registra correctamente dentro de ese
+                    tiempo, el bombero se creará correctamente.
+                  </p>
+                  <p className="text-sm">
+                    4. Si no se coloca la huella a tiempo, el bombero no se
+                    creará y tendrá que intentarlo nuevamente.
+                  </p>
+                  <p className="text-sm">
+                    <strong>
+                      Nota: es obligatorio que el bombero tenga registrada una
+                      huella.
+                    </strong>
+                  </p>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={() => { onClose(); setIsLoading(false); }}>
+                  Cancelar
+                </Button>
+                <Button
+                  color="primary"
+                  {...(isLoading ? { isLoading: true } : {})}
+                  onPress={() => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      setIsLoading(false);
+                    }, 5000);
+                  }}
+                >
+                  {isLoading ? "Escaneando huella..." : "Continuar" }
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

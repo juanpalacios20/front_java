@@ -6,6 +6,7 @@ import './index.css'
 import App from './App.jsx'
 import CreateFireman from './pages/CreateFireman.js';
 import Home from './pages/Home.js';
+import FingerPrintScan from './pages/FingerPrintScan.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/app" element={<App />} />
           <Route path="/CreateForm" element={<CreateFireman />} />
           <Route path="/Home" element={<Home />} />
+          <Route path="/Scan" element={<FingerPrintScan />} />
         </Routes>
       </HeroUIProvider>
     </BrowserRouter>
