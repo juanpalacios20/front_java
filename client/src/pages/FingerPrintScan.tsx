@@ -1,9 +1,18 @@
 import { Input, Form, Button } from "@heroui/react";
 import React, { useState } from "react";
 
+interface ResponseData {
+  message: string | null;
+  username: string | null;
+}
+
 export function FingerPrintScan() {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<{ message?: string; flask_response?: string } | null>(null);
+  const [result, setResult] = useState<{
+    message?: string;
+    flask_response?: string;
+  } | null>(null);
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
   const handleScan = async () => {
     setIsLoading(true);
@@ -11,19 +20,40 @@ export function FingerPrintScan() {
       const response = await fetch("http://localhost:8080/fingerprint/verify", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
-      const data = await response.json();
+      const json = await response.json();
+      let parsedFlask: Partial<ResponseData> = {};
 
-      if (!response.ok) {
-        throw new Error(data.message || "Error desconocido");
+      if (json.flask_response) {
+        try {
+          parsedFlask = JSON.parse(json.flask_response);
+        } catch (e) {
+          console.warn("No se pudo parsear flask_response:", e);
+        }
       }
 
-      setResult(data);
-    } catch (error) {
-      setResult({ message: error.message });
+      if (response.status === 500) {
+        setResponseData({ message: "Ha ocurrido un error inesperado, intentelo nuevamente", username: null });
+        return;
+      }
+      const message =
+        parsedFlask.message || json.message || "Ocurrió un error inesperado";
+
+      const username = parsedFlask.username || null;
+
+      setResponseData({
+        message,
+        username,
+      });
+    } catch (error: any) {
+      console.error("Ocurrio un error:", error);
+      setResponseData({
+        message: "No se pudo conectar con el servidor",
+        username: null,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -46,10 +76,9 @@ export function FingerPrintScan() {
             Escanear huella
           </Button>
 
-          {result && (
+          {responseData?.message && (
             <div className="mt-6 text-center text-sm text-gray-700">
-              {result.message && <p>{result.message}</p>}
-              {result.flask_response && <pre>{JSON.stringify(JSON.parse(result.flask_response), null, 2)}</pre>}
+              <p>{responseData.message}</p>
             </div>
           )}
         </Form>
