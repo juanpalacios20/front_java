@@ -191,7 +191,7 @@ export function CreateFireman() {
             </Button>
           </div>
 
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={() => setResponseData(null)}>
             <ModalContent>
               {(onClose) => (
                 <>
@@ -232,6 +232,7 @@ export function CreateFireman() {
                       onPress={() => {
                         onClose();
                         setIsLoading(false);
+                        setResponseData(null);
                       }}
                     >
                       Cancelar
