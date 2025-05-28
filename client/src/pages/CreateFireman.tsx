@@ -16,10 +16,16 @@ import { addToast } from "@heroui/toast";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
+interface ResponseData {
+  message: string | null;
+  username: string | null;
+}
+
 export function CreateFireman() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -90,7 +96,11 @@ export function CreateFireman() {
         gs: "",
       });
     } catch (error) {
-      console.log(error);
+      console.log("este es el error:", error);
+      setResponseData({
+        message: "Ha ocurrido un error inesperado, intentelo nuevamente",
+        username: null,
+      });
       addToast({
         title: "Error",
         description: "Ocurrió un error inesperado. Inténtalo de nuevo.",
@@ -176,11 +186,7 @@ export function CreateFireman() {
             <Button color="primary" variant="shadow" onPress={handleCreate}>
               Crear
             </Button>
-            <Button
-              type="reset"
-              variant="light"
-              onPress={() => navigate("/")}
-            >
+            <Button type="reset" variant="light" onPress={() => navigate("/")}>
               Cancelar
             </Button>
           </div>
@@ -240,6 +246,11 @@ export function CreateFireman() {
                       {isLoading ? "Escaneando huella..." : "Continuar"}
                     </Button>
                   </ModalFooter>
+                  {responseData?.message && (
+                    <div className="mb-4 text-center text-sm">
+                      <p>{responseData.message}</p>
+                    </div>
+                  )}
                 </>
               )}
             </ModalContent>
