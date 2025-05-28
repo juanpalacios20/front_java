@@ -149,6 +149,7 @@ export function CreateFireman() {
           />
           <Select
             isRequired
+            name="gs"
             label="Tipo de sangre"
             labelPlacement="outside"
             placeholder="Selecciona el tipo de sangre"
@@ -178,7 +179,7 @@ export function CreateFireman() {
             <Button
               type="reset"
               variant="light"
-              onPress={() => navigate("/Home")}
+              onPress={() => navigate("/")}
             >
               Cancelar
             </Button>

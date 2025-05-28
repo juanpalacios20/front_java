@@ -8,7 +8,7 @@ export function Home() {
     <div className="flex min-h-screen justify-center items-center">
       <div className="flex flex-col gap-6 items-center w-full max-w-xl p-8 shadow-md rounded-xl bg-white">
         <div className="flex flex-col gap-6 items-center justify-center w-full max-w-xl p-8 rounded-xl">
-          <Image alt="Logo" src="logo.png" width={200} height={200}></Image>
+          <img alt="Logo" src="/img/logo.png" width={200} height={200}></img>
           <div className="flex gap-6 items-center justify-center w-full max-w-xl p-8 rounded-xl bg-white">
             <Button
               color="primary"
