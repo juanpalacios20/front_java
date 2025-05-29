@@ -18,7 +18,6 @@ import axios from "axios";
 
 interface ResponseData {
   message: string | null;
-  username: string | null;
 }
 
 export function CreateFireman() {
@@ -77,6 +76,10 @@ export function CreateFireman() {
         `http://localhost:8080/fingerprint/register`,
         payload
       );
+      
+      setResponseData({
+        message: response.data.message || "Bombero creado exitosamente"
+      });
 
       addToast({
         title: "Bombero creado",
@@ -98,15 +101,7 @@ export function CreateFireman() {
     } catch (error) {
       console.log("este es el error:", error);
       setResponseData({
-        message: "Ha ocurrido un error inesperado, intentelo nuevamente",
-        username: null,
-      });
-      addToast({
-        title: "Error",
-        description: "Ocurrió un error inesperado. Inténtalo de nuevo.",
-        color: "danger",
-        timeout: 3000,
-        shouldShowTimeoutProgress: true,
+        message: error.response?.data?.message || "Ha ocurrido un error inesperado, intentelo nuevamente",
       });
     } finally {
       setIsLoading(false);

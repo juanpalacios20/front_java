@@ -1,5 +1,6 @@
 import { Input, Form, Button } from "@heroui/react";
 import React, { useState } from "react";
+import { Link } from "react-router";
 
 interface ResponseData {
   message: string | null;
@@ -36,7 +37,10 @@ export function FingerPrintScan() {
       }
 
       if (response.status === 500) {
-        setResponseData({ message: "Ha ocurrido un error inesperado, intentelo nuevamente", username: null });
+        setResponseData({
+          message: "Ha ocurrido un error inesperado, intentelo nuevamente",
+          username: null,
+        });
         return;
       }
       const message =
@@ -61,6 +65,12 @@ export function FingerPrintScan() {
 
   return (
     <div className="flex min-h-screen justify-center items-center">
+      <Link
+        to="/"
+        className="absolute top-4 left-4 text-lg text-gray-700 underline cursor-auto"
+      >
+        volver
+      </Link>
       <div className="w-full max-w-xl p-8 shadow-md rounded-xl bg-white">
         <Form>
           <h1 className="text-center font-bold text-2xl mb-4">
