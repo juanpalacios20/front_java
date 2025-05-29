@@ -65,33 +65,35 @@ export function FingerPrintScan() {
 
   return (
     <div className="flex min-h-screen justify-center items-center">
-      <Link
-        to="/"
-        className="absolute top-4 left-4 text-lg text-gray-700 underline cursor-auto"
-      >
-        volver
-      </Link>
-      <div className="w-full max-w-xl p-8 shadow-md rounded-xl bg-white">
-        <Form>
-          <h1 className="text-center font-bold text-2xl mb-4">
-            Administrar turno de bombero
-          </h1>
-          <Button
-            isLoading={isLoading}
-            color="primary"
-            className="mt-4 w-full"
-            variant="shadow"
-            onPress={handleScan}
-          >
-            Escanear huella
-          </Button>
+      <div className="w-full max-w-xl">
+        <Link
+          to="/"
+          className="top-4 left-4 text-lg text-gray-700 underline cursor-auto"
+        >
+          volver
+        </Link>
+        <div className="w-full max-w-xl p-8 shadow-md rounded-xl bg-white">
+          <Form>
+            <h1 className="text-center font-bold text-2xl mb-4">
+              Administrar turno de bombero
+            </h1>
+            <Button
+              isLoading={isLoading}
+              color="primary"
+              className="mt-4 w-full"
+              variant="shadow"
+              onPress={handleScan}
+            >
+              Escanear huella
+            </Button>
 
-          {responseData?.message && (
-            <div className="mt-6 text-center text-sm text-gray-700">
-              <p>{responseData.message}</p>
-            </div>
-          )}
-        </Form>
+            {responseData?.message && (
+              <div className="mt-6 text-center text-sm text-gray-700">
+                <p>{responseData.message}</p>
+              </div>
+            )}
+          </Form>
+        </div>
       </div>
     </div>
   );
