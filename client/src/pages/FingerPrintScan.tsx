@@ -26,6 +26,7 @@ export function FingerPrintScan() {
       });
 
       const json = await response.json();
+      console.log("Respuesta del servidor:", json);
       let parsedFlask: Partial<ResponseData> = {};
 
       if (json.flask_response) {
@@ -89,7 +90,7 @@ export function FingerPrintScan() {
 
             {responseData?.message && (
               <div className="mt-6 text-center text-sm text-gray-700">
-                <p>{responseData.message}</p>
+                <p>{responseData.username} {responseData.message}</p>
               </div>
             )}
           </Form>
